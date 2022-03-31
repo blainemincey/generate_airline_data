@@ -33,7 +33,7 @@ def main():
     init(mdb_connection)
     flight_reservation_collection = mdb_connection[MDB_COLLECTION]
 
-    # array of insured documents.  insert every 1000
+    # array of generated documents.  Bulk insert every 1000.
     flight_reservation_data = []
     document_count = 0
 
@@ -47,7 +47,7 @@ def main():
         document_count += 1
 
         # Indicate how many docs inserted
-        if len(flight_reservation_data) % 100 == 0:
+        if len(flight_reservation_data) % 1000 == 0:
             flight_reservation_collection.insert_many(flight_reservation_data)
             print('Docs inserted: ' + str(document_count))
             flight_reservation_data.clear()
@@ -90,6 +90,7 @@ def get_fullfillment_info():
     # return flight up to 5 days ahead
     return_flt_date = faker.future_datetime(end_date='+5d')
 
+    # Grab the add'l arrays required to build fullfillment_info document
     refund_data_list = get_refund_data_list(origin_code, origin_flt_date, dest_code, return_flt_date)
     pnr_segment = get_pnr_segment(origin_code, origin_flt_date, dest_code, return_flt_date)
 
